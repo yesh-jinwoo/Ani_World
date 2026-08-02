@@ -19,7 +19,7 @@ The frontend sends HTTP requests to the API. Django validates requests, applies 
 
 ## Current status
 
-Phase 1 is in progress: repository setup, Django configuration, PostgreSQL environment configuration, and project structure.
+Phase 3 is in progress: session-based registration, login, logout, and current-user API endpoints are implemented. PostgreSQL must be running before migrations and full authentication tests can run.
 
 ## Local setup
 
@@ -54,6 +54,36 @@ Phase 1 is in progress: repository setup, Django configuration, PostgreSQL envir
 | `DJANGO_ALLOWED_HOSTS` | comma-separated allowed hostnames |
 | `DJANGO_CSRF_TRUSTED_ORIGINS` | allowed browser origins for state-changing requests |
 | `POSTGRES_*` | PostgreSQL connection settings |
+
+## Authentication API
+
+| Method | Endpoint | Purpose |
+| --- | --- | --- |
+| `GET` | `/api/auth/csrf/` | sets the CSRF cookie for secure browser requests |
+| `POST` | `/api/auth/register/` | creates a user and starts a session |
+| `POST` | `/api/auth/login/` | signs in by username or email |
+| `POST` | `/api/auth/logout/` | invalidates the current session |
+| `GET` | `/api/auth/me/` | returns the authenticated user; protected |
+
+The API uses Django server-side sessions. The browser sends its HttpOnly session cookie automatically, while JavaScript sends the separate CSRF token for state-changing requests.
+
+## Viewing locally
+
+Start the backend in one terminal:
+
+```powershell
+cd backend
+..\.venv\Scripts\python.exe manage.py runserver
+```
+
+Start the frontend in a second terminal:
+
+```powershell
+cd frontend
+..\.venv\Scripts\python.exe -m http.server 5500
+```
+
+Open `http://127.0.0.1:5500`. Authentication requires PostgreSQL migrations to have been run first.
 
 ## Git workflow
 
