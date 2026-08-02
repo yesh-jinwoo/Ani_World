@@ -1,5 +1,6 @@
 import { authApi } from "../api/api.js";
-import { prepareSecureRequest, readableError, setMessage, setSubmitting } from "./form.js";
+import { prepareSecureRequest, readableError, renderApiErrors, setMessage, setSubmitting } from "./form.js";
+import { playAuthSuccess } from "./success.js";
 
 const form = document.querySelector("#register-form");
 const message = document.querySelector("#form-message");
@@ -14,8 +15,8 @@ form.addEventListener("submit", async (event) => {
   setSubmitting(submit, true, "Join AniWorld →");
   try {
     await authApi.register(Object.fromEntries(data));
-    setMessage(message, "Your account is ready. You are now signed in.", true);
-    form.reset();
-  } catch (error) { setMessage(message, readableError(error)); }
+    await playAuthSuccess({ title: "Welcome to AniWorld.", message: "Your legend begins now." });
+    window.location.assign("dashboard.html");
+  } catch (error) { renderApiErrors(form, message, error); }
   finally { setSubmitting(submit, false, "Join AniWorld →"); }
 });

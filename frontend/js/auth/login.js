@@ -1,5 +1,6 @@
 import { authApi } from "../api/api.js";
-import { prepareSecureRequest, readableError, setMessage, setSubmitting } from "./form.js";
+import { prepareSecureRequest, readableError, renderApiErrors, setMessage, setSubmitting } from "./form.js";
+import { playAuthSuccess } from "./success.js";
 
 const form = document.querySelector("#login-form");
 const message = document.querySelector("#form-message");
@@ -13,8 +14,8 @@ form.addEventListener("submit", async (event) => {
   try {
     const data = new FormData(form);
     await authApi.login({ identifier: data.get("identifier"), password: data.get("password"), remember_me: data.get("remember_me") === "on" });
-    setMessage(message, "Signed in successfully. Your dashboard is coming in Phase 8.", true);
-    form.reset();
-  } catch (error) { setMessage(message, readableError(error)); }
+    await playAuthSuccess({ title: "Welcome back, hunter.", message: "Your world is opening." });
+    window.location.assign("dashboard.html");
+  } catch (error) { renderApiErrors(form, message, error); }
   finally { setSubmitting(submit, false, "Log in →"); }
 });

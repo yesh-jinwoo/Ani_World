@@ -19,7 +19,7 @@ The frontend sends HTTP requests to the API. Django validates requests, applies 
 
 ## Current status
 
-Phase 3 is in progress: session-based registration, login, logout, and current-user API endpoints are implemented. PostgreSQL must be running before migrations and full authentication tests can run.
+Phase 4 is in progress: session-based authentication includes cinematic success feedback, inline errors, loading states, and a protected authenticated-home placeholder. PostgreSQL is used for all account data.
 
 ## Local setup
 
